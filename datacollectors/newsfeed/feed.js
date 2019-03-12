@@ -1,7 +1,7 @@
 var reader = require('rss-to-json');
 var mongo = require('mongodb').MongoClient;
 
-var feedUrl = "https://stuv-mosbach.de/feed/";
+var feedUrl = "https://stuv-mosbach.de/feedsy/";
 var url_DB = "mongodb://localhost:27017/";
 
 var db_env = "Dev";
@@ -51,5 +51,5 @@ const insertElement = (data, dbo) => {
 
 
 exports.run = () => {
-loadFeed(feedUrl);
+  loadFeed(feedUrl);
 };

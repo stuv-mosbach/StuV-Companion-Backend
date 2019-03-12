@@ -1,53 +1,53 @@
 var agenda = require('agenda');
-var events = require('../datacollectors/events/index');
+var events = require('../datacollectors/events/events');
 var plan = require('../datacollectors/plan/index');
-var lectures = require('../datacollectors/lectures/index');
-var feed = require('../datacollectors/newsfeed/index');
-var course = require('../datacollectors/courses/index');
+var lectures = require('../datacollectors/lectures/lectures');
+var feed = require('../datacollectors/newsfeed/feed');
+var course = require('../datacollectors/courses/courses');
 
 var url_DB = "mongodb://localhost:27017/agenda";
 
 var agent = new agenda({db: {address: url_DB}});
 
-agent.define('Update StuV-Events', (job, done) => {
+agent.define('Update StuV-Events', async (job, done) => {
   try {
-    events.main();
+    await events.run();
     done();
   } catch (err) {
     done(err);
   }
 });
 
-agent.define('Update Mensaplan', (job, done) => {
+agent.define('Update Mensaplan', async (job, done) => {
   try {
-    plan.main();
+    await plan.main();
     done();
   } catch (err) {
     done(err);
   }
 });
 
-agent.define('Update Vorlesungen', (job, done) => {
+agent.define('Update Vorlesungen', async (job, done) => {
   try {
-    lectures.lectures();
+    await lectures.run();
     done();
   } catch (err) {
     done(err);
   }
 });
 
-agent.define('Update Kurse', (job, done) => {
+agent.define('Update Kurse', async (job, done) => {
   try {
-    course.courses();
+    await course.run();
     done();
   } catch (err) {
     done(err);
   }
 });
 
-agent.define('Update Feed', (job, done) => {
+agent.define('Update Feed', async (job, done) => {
   try {
-    feed.main();
+    await feed.run();
     done();
   } catch (err) {
     done(err);
