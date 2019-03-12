@@ -12,46 +12,46 @@ var agent = new agenda({db: {address: url_DB}});
 agent.define('Update StuV-Events', (job, done) => {
   try {
     events.main();
-  } catch (e) {
-    job.fail(e.toString());
+    done();
+  } catch (err) {
+    done(err);
   }
-  done();
 });
 
 agent.define('Update Mensaplan', (job, done) => {
   try {
     plan.main();
-  } catch (e) {
-    job.fail(e.toString());
+    done();
+  } catch (err) {
+    done(err);
   }
-  done();
 });
 
 agent.define('Update Vorlesungen', (job, done) => {
   try {
     lectures.lectures();
-  } catch (e) {
-    job.fail(e.toString());
+    done();
+  } catch (err) {
+    done(err);
   }
-  done();
 });
 
 agent.define('Update Kurse', (job, done) => {
   try {
     course.courses();
-  } catch (e) {
-    job.fail(e.toString());
+    done();
+  } catch (err) {
+    done(err);
   }
-  done();
 });
 
 agent.define('Update Feed', (job, done) => {
   try {
     feed.main();
-  } catch (e) {
-    job.fail(e.toString());
+    done();
+  } catch (err) {
+    done(err);
   }
-  done();
 });
 
 exports.get = () => {

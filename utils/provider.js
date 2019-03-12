@@ -32,7 +32,7 @@ var feedSchema = new Schema({
 var lectureSchema = new Schema({
   uid: String,
   dtstamp: String,
-  dstart: String,
+  dtstart: String,
   class: String,
   created: String,
   description: String,
