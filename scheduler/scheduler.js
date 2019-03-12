@@ -1,6 +1,6 @@
 var agenda = require('agenda');
 var events = require('../datacollectors/events/events');
-var plan = require('../datacollectors/plan/index');
+var plan = require('../datacollectors/plan/reader');
 var lectures = require('../datacollectors/lectures/lectures');
 var feed = require('../datacollectors/newsfeed/feed');
 var course = require('../datacollectors/courses/courses');
@@ -20,7 +20,7 @@ agent.define('Update StuV-Events', async (job, done) => {
 
 agent.define('Update Mensaplan', async (job, done) => {
   try {
-    await plan.main();
+    await plan.run();
     done();
   } catch (err) {
     done(err);
@@ -37,12 +37,9 @@ agent.define('Update Vorlesungen', async (job, done) => {
 });
 
 agent.define('Update Kurse', async (job, done) => {
-  try {
-    await course.run();
-    done();
-  } catch (err) {
-    done(err);
-  }
+  course.run()
+    .then(() => {done();})
+    .catch(err => {done(err);});
 });
 
 agent.define('Update Feed', async (job, done) => {
