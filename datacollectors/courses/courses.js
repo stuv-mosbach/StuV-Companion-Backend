@@ -23,7 +23,7 @@ const getData = (url, resolve, reject) => {
             courses.push(toAdd);
         });
         courses = cleanUp(courses);
-        updateCourses(courses);
+        updateCourses(courses, resolve, reject);
         //resolve(); //todo: Chain promise to every error else i am fucked!
       })
       .catch((err) => {
@@ -31,44 +31,45 @@ const getData = (url, resolve, reject) => {
       });
 };
 
-const updateCourses = data => {
+const updateCourses = (data, resolve, reject) => {
     mongo.connect(url_DB, { useNewUrlParser: true }, (err, db) => {
-        if (err) throw err;
+        if (err) reject(err);
         var dbo = db.db(db_env);
         data.forEach(element => {
             var query = { course: element.course };
             dbo.collection("courses").findOne(query, (err, res) => {
-                if (err) throw err;
+                if (err) reject(err);
                 if (res == null) {
-                    insertElement(element);
+                    insertElement(element, resolve, reject);
                 } else if (res.course != element.course) {
-                    updateElement(element);
+                    updateElement(element, resolve, reject);
                 }
                 db.close();
             });
         });
+        resolve();
     });
 };
 
-const updateElement = data => {
+const updateElement = (data, resolve, reject) => {
     mongo.connect(url_DB, { useNewUrlParser: true }, (err, db) => {
-        if (err) throw err;
+        if (err) reject(err);
         var dbo = db.db(db_env);
         var query = { course: data.course };
         dbo.collection("courses").updateOne(query, { $set: { url: data.url} }, (err, res) => {
-            if (err) throw err;
+            if (err) reject(err);
             // console.log(data.course + " updated");
             db.close();
         });
     });
 };
 
-const insertElement = data => {
+const insertElement = (data, resolve, reject) => {
     mongo.connect(url_DB, { useNewUrlParser: true }, (err, db) => {
-        if (err) throw err;
+        if (err) reject(err);
         var dbo = db.db(db_env);
         dbo.collection("courses").insertOne(data, (err, res) => {
-            if (err) throw err;
+            if (err) reject(err);
             // console.log(data.course + " inserted");
             db.close();
         });
@@ -83,21 +84,6 @@ const cleanUp = data => {
         if(dt != null && dt[0] > (year - 4)) result.push(element);
     });
     return result;
-};
-
-const execute = async () => {
-  data =  getData(url_Courses);
-  var lines = data.split('\n');
-  lines.forEach(element => {
-      var entry = element.split(';');
-      var toAdd = {
-          course: entry[0],
-          url: entry[1]
-      };
-      courses.push(toAdd);
-  });
-  courses = cleanUp(courses);
-  updateCourses(courses);
 };
 
 exports.run = () => {

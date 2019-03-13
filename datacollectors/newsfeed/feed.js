@@ -1,55 +1,60 @@
 var reader = require('rss-to-json');
 var mongo = require('mongodb').MongoClient;
 
-var feedUrl = "https://stuv-mosbach.de/feedsy/";
+var feedUrl = "https://stuv-mosbach.de/feed/";
 var url_DB = "mongodb://localhost:27017/";
 
 var db_env = "Dev";
 
-const loadFeed = url => {
+const loadFeed = (url, resolve, reject) => {
   reader.load(url, (err, res) => {
-    if (err) throw new Error(err);
-    updateEvents(res);
+    if (err) reject(err);
+    updateEvents(res, resolve, reject);
   });
 };
 
-const updateEvents = (data) => {
+const updateEvents = (data, resolve, reject) => {
   mongo.connect(url_DB, { useNewUrlParser: true }, (err, db) => {
-    if (err) throw new Error(err);
+    if (err) reject(err);
     var dbo = db.db(db_env);
     var counter = 0;
     data.items.forEach(e => {
       var query = { title: e.title };
       dbo.collection("feeds").findOne(query, (err, res) => {
-        if (err) throw new Error(err);
+        if (err) reject(err);
         counter++;
         if (res == null) {
-          insertElement(e, dbo);
+          insertElement(e, dbo, resolve, reject);
         } else if (res.description != e.description) {
-          updateElement(e, dbo);
+          updateElement(e, dbo, resolve, reject);
         }
-        if (counter >= data.items.length) db.close();
+        if (counter >= data.items.length) {
+          db.close();
+          resolve();
+        }
       });
     });
   });
 };
 
-const updateElement = (data, dbo) => {
+const updateElement = (data, dbo, resolve, reject) => {
         var query = { title: data.title };
         dbo.collection("feeds").updateOne(query, { $set: data }, (err, res) => {
-            if (err) throw new Error(err);
+            if (err) reject(err);
             // console.log(data.title + " updated");
         });
 };
 
-const insertElement = (data, dbo) => {
+const insertElement = (data, dbo, resolve, reject) => {
     dbo.collection("feeds").insertOne(data, (err, res) => {
-        if (err) throw new Error(err);
+        if (err) reject(err);
         // console.log(data.title + " inserted");
     });
 };
 
 
 exports.run = () => {
-  loadFeed(feedUrl);
+  return new Promise((resolve, reject) => {
+    loadFeed(feedUrl, resolve, reject);
+  });
 };

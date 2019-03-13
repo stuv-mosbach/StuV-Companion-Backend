@@ -6,6 +6,7 @@ var url_DB = "mongodb://localhost:27017/";
 var db_env = "Dev";
 
 var courses;
+var mainCounter = 0;
 
 const compJson = (obj1, obj2) => {
   var flag=true;
@@ -28,65 +29,74 @@ const compJson = (obj1, obj2) => {
   return flag;
 };
 
-const loadCourses = () => {
+const loadCourses = (resolve, reject) => {
     mongo.connect(url_DB, { useNewUrlParser: true }, (err, db) => {
-        if (err) throw new Error(err);
+        if (err) reject(err);
         var dbo = db.db(db_env);
         dbo.collection("courses").find({}).toArray((err, res) => {
-            if (err) throw new Error(err);
+            if (err) reject(err);
             courses = res;
             db.close();
-            updateLectures();
+            updateLectures(resolve, reject);
         });
     });
 };
 
-const updateElement = (data, dbo) => {
+const updateElement = (data, dbo, resolve, reject) => {
         var query = { uid: data.uid };
         dbo.collection("lectures").updateOne(query, { $set: data }, (err, res) => {
-            if (err) throw new Error(err);
+            if (err) reject(err);
             // console.log(data.course + " lecture: " + data.uid + " updated");
         });
 };
 
-const updateCourse = (data, name) => {
+const updateCourse = (data, name, resolve, reject) => {
     data.events.forEach(e => e.course = name);
     data.events.shift();
     mongo.connect(url_DB, { useNewUrlParser: true }, (err, db) => {
-      if (err) throw new Error(err);
+      if (err) reject(err);
       var dbo = db.db(db_env);
       var counter = 0;
       data.events.forEach(e => {
         var query = { uid: e.uid };
         dbo.collection("lectures").findOne(query, (err, res) => {
-          if (err) throw new Error(err);
+          if (err) reject(err);
           counter++;
           if (res == null) {
-            insertElement(e, dbo);
+            insertElement(e, dbo, resolve, reject);
           } else {
             e._id = res._id;
-            if(!compJson(e, res)) updateElement(e, dbo);
+            if(!compJson(e, res)) updateElement(e, dbo, resolve, reject);
           }
-          if (counter >= data.events.length) db.close();
+          if (counter >= data.events.length) {
+            db.close();
+            mainCounter++;
+        }
+          if(mainCounter >= courses.length) {
+            resolve();
+          }
         });
       });
     });
 };
 
-const insertElement = (data, dbo) => {
+const insertElement = (data, dbo, resolve, reject) => {
         dbo.collection("lectures").insertOne(data, (err, res) => {
-            if (err) throw new Error(err);
+            if (err) reject(err);
             // console.log(data.course + " lecture: " + data.uid + " inserted");
         });
 };
 
-const updateLectures = () => {
+const updateLectures = (resolve, reject) => {
     courses.forEach(e => {
         icalhelp.main(e.url)
-            .then(res => updateCourse(res, e.course));
+            .then((res) => updateCourse(res, e.course, resolve, reject))
+            .catch(err => reject(err));
     });
 };
 
 exports.run = () => {
-    loadCourses();
+  return new Promise((resolve, reject) => {
+    loadCourses(resolve, reject);
+  });
 };

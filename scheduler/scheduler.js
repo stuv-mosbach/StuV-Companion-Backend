@@ -10,30 +10,21 @@ var url_DB = "mongodb://localhost:27017/agenda";
 var agent = new agenda({db: {address: url_DB}});
 
 agent.define('Update StuV-Events', async (job, done) => {
-  try {
-    await events.run();
-    done();
-  } catch (err) {
-    done(err);
-  }
+  events.run()
+  .then(() => {done();})
+  .catch(err => {done(err);});
 });
 
 agent.define('Update Mensaplan', async (job, done) => {
-  try {
-    await plan.run();
-    done();
-  } catch (err) {
-    done(err);
-  }
+  plan.run()
+  .then(() => {done();})
+  .catch(err => {done(err);});
 });
 
 agent.define('Update Vorlesungen', async (job, done) => {
-  try {
-    await lectures.run();
-    done();
-  } catch (err) {
-    done(err);
-  }
+  lectures.run()
+  .then(() => {done();})
+  .catch(err => {done(err);});
 });
 
 agent.define('Update Kurse', async (job, done) => {
@@ -43,12 +34,17 @@ agent.define('Update Kurse', async (job, done) => {
 });
 
 agent.define('Update Feed', async (job, done) => {
-  try {
-    await feed.run();
-    done();
-  } catch (err) {
-    done(err);
-  }
+  feed.run()
+  .then(() => {done();})
+  .catch(err => {done(err);});
+});
+
+agent.on('start', job => {
+  console.log('Job %s starting', job.attrs.name);
+});
+
+agent.on('complete', job => {
+  console.log(`Job ${job.attrs.name} finished`);
 });
 
 exports.get = () => {
