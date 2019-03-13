@@ -1,10 +1,11 @@
 var axios = require('axios');
 var mongo = require('mongodb').MongoClient;
+var dbProvider = require('../../utils/db');
 
 var url_Courses = "http://ics.mosbach.dhbw.de/ics/calendars.list";
-var url_DB = "mongodb://localhost:27017/";
+var url_DB = dbProvider.getUrl();
 
-var db_env = "Dev";
+var db_env = dbProvider.getEnv();
 
 var data;
 var courses = [];

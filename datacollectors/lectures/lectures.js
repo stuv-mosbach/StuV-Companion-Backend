@@ -1,9 +1,10 @@
 var mongo = require('mongodb').MongoClient;
 var icalhelp = require('./ical-helper');
+var dbProvider = require('../../utils/db');
 
-var url_DB = "mongodb://localhost:27017/";
+var url_DB = dbProvider.getUrl();
 
-var db_env = "Dev";
+var db_env = dbProvider.getEnv();
 
 var courses;
 var mainCounter = 0;

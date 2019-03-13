@@ -1,10 +1,11 @@
 var reader = require('rss-to-json');
 var mongo = require('mongodb').MongoClient;
+var dbProvider = require('../../utils/db');
 
 var feedUrl = "https://stuv-mosbach.de/feed/";
-var url_DB = "mongodb://localhost:27017/";
+var url_DB = dbProvider.getUrl();
 
-var db_env = "Dev";
+var db_env = dbProvider.getEnv();
 
 const loadFeed = (url, resolve, reject) => {
   reader.load(url, (err, res) => {

@@ -1,12 +1,13 @@
 var icalhelp = require('../lectures/ical-helper');
 var mongo = require('mongodb').MongoClient;
 var datehelper = require('./dateParser');
+var dbProvider = require('../../utils/db');
 
 var calendar_url = "https://calendar.google.com/calendar/ical/asta.dhbw.de_08mkcuqcrppq8cg8vlutdsgpjg%40group.calendar.google.com/public/basic.ics";
 
-var url_DB = "mongodb://localhost:27017/";
+var url_DB = dbProvider.getUrl();
 
-var db_env = "Dev";
+var db_env = dbProvider.getEnv();
 var mainCounter = 0;
 
 const getEvents = (resolve, reject) => {

@@ -4,8 +4,9 @@ var plan = require('../datacollectors/plan/reader');
 var lectures = require('../datacollectors/lectures/lectures');
 var feed = require('../datacollectors/newsfeed/feed');
 var course = require('../datacollectors/courses/courses');
+var dbProvider = require('../utils/db');
 
-var url_DB = "mongodb://localhost:27017/agenda";
+var url_DB = dbProvider.getUrl() + "agenda";
 
 var agent = new agenda({db: {address: url_DB}});
 
