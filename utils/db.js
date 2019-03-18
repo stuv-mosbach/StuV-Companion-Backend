@@ -1,5 +1,5 @@
-var url = "mongodb://localhost:27017/";
-var env = "Dev";
+var url = "mongodb://172.17.0.3:27017/";
+var env = "Prod";
 
 exports.getUrl = () => {
   return url;
