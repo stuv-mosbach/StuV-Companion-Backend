@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
       },
       {
         url: "/lectures/[COURSE]",
-        description: "get all lectures for a course given via paramter"
+        description: "get all lectures for a course given via parameter"
       },
       {
         url: "/events",
@@ -50,8 +50,9 @@ router.get('/lectures/:course', (req, res) => {
   lecture.find({course: req.params.course.toUpperCase()}, (err, data) => {
     if (err) res.json(err);
     var response = [];
-    data.forEach(e => response.push({start: e.dtstart, end: e.dtend, lastModified: e['last-modified'], title: e.summary, description: e.description, location: e.location, course: e.course,}));
-    res.json(response);
+    data.forEach(e => response.push({start: e.dtstart, end: e.dtend, lastModified: e['last-modified'], title: e.summary, description: e.description, location: e.location, course: e.course}));
+    if (res == null) res.json({"No course found or there are no lectures yet!"});
+    else res.json(response);
   });
 });
 

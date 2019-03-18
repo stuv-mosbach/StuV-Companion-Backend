@@ -4,6 +4,7 @@ var scheduler = require('./scheduler/scheduler');
 var routes = require('./api/routes');
 var mongoose = require('mongoose');
 var dbProvider = require('./utils/db');
+var cors = require('cors');
 
 var dbUrl = dbProvider.getUrl() + dbProvider.getEnv();
 var app = express();
@@ -13,6 +14,8 @@ scheduler.run();
 
 mongoose.connect(dbUrl, { useNewUrlParser: true });
 var db = mongoose.connection;
+
+app.use(cors());
 
 app.use('/dash', agendash(scheduler.get()));
 
