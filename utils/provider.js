@@ -22,11 +22,16 @@ var eventSchema = new Schema({
 });
 
 var feedSchema = new Schema({
+  creator: String,
   title: String,
-  description: String,
   link: String,
-  url: String,
-  created: Number
+  pubDate: String,
+  'content:encoded': String,
+  'dc:creator': String,
+  content: String,
+  contentSnippet: String,
+  guid: String,
+  isoDate: String
 });
 
 var lectureSchema = new Schema({

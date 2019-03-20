@@ -51,7 +51,19 @@ router.get('/lectures/:course', (req, res) => {
     if (err) res.json(err);
     var response = [];
     data.forEach(e => response.push({start: e.dtstart, end: e.dtend, lastModified: e['last-modified'], title: e.summary, description: e.description, location: e.location, course: e.course}));
-    if (res == null) res.json({error: "No course found or there are no lectures yet!"});
+    if (res == []) res.json({error: "No course found or there are no lectures yet!"});
+    else res.json(response);
+  });
+});
+
+router.get('/futureLectures/:course', (req, res) => {
+  lecture.find({course: req.params.course.toUpperCase()}, (err, data) => {
+    if (err) res.json(err);
+    var response = [];
+    data.forEach(e => {
+      if((new Date(e.dtstart)) > (new Date())) response.push({start: e.dtstart, end: e.dtend, lastModified: e['last-modified'], title: e.summary, description: e.description, location: e.location, course: e.course});
+    });
+    if (res == []) res.json({error: "No course found or there are no lectures yet!"});
     else res.json(response);
   });
 });
@@ -78,7 +90,7 @@ router.get('/news', (req, res) => {
   feed.find((err, data) => {
     if (err) res.json(err);
     var response = [];
-    data.forEach(e => response.push({title: e.title, description: e.description, url: e.url, created: new Date(e.created)}));
+    data.forEach(e => response.push({title: e.title, description: e['content:encoded'], url: e.link, created: new Date(e.isoDate)}));
     res.json(response);
   });
 });

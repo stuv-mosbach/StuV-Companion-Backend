@@ -1,4 +1,5 @@
-var reader = require('rss-to-json');
+var Reader = require('rss-parser');
+var reader = new Reader();
 var mongo = require('mongodb').MongoClient;
 var dbProvider = require('../../utils/db');
 
@@ -7,11 +8,9 @@ var url_DB = dbProvider.getUrl();
 
 var db_env = dbProvider.getEnv();
 
-const loadFeed = (url, resolve, reject) => {
-  reader.load(url, (err, res) => {
-    if (err) reject(err);
-    updateEvents(res, resolve, reject);
-  });
+const loadFeed = async (url, resolve, reject) => {
+  let data = await reader.parseURL(url);
+  updateEvents(data, resolve, reject);
 };
 
 const updateEvents = (data, resolve, reject) => {
@@ -26,7 +25,7 @@ const updateEvents = (data, resolve, reject) => {
         counter++;
         if (res == null) {
           insertElement(e, dbo, resolve, reject);
-        } else if (res.description != e.description) {
+        } else if (res.content != e.content) {
           updateElement(e, dbo, resolve, reject);
         }
         if (counter >= data.items.length) {
