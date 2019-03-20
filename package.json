@@ -21,7 +21,6 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "rss-parser": "^3.7.0",
-    "rss-to-json": "^1.0.4",
     "split-lines": "^2.0.0"
   }
 }
