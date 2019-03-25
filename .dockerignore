@@ -6,3 +6,4 @@ Dockerfile
 .gitignore
 LICENSE
 README.md
+backend_prod.tar

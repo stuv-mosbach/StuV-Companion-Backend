@@ -61,11 +61,52 @@ router.get('/futureLectures/:course', (req, res) => {
     if (err) res.json(err);
     var response = [];
     data.forEach(e => {
-      if((new Date(e.dtstart)) > (new Date())) response.push({start: e.dtstart, end: e.dtend, lastModified: e['last-modified'], title: e.summary, description: e.description, location: e.location, course: e.course});
+      if((new Date(e.dtstart)) >= (new Date())) response.push({start: e.dtstart, end: e.dtend, lastModified: e['last-modified'], title: e.summary, description: e.description, location: e.location, course: e.course});
     });
     if (res == []) res.json({error: "No course found or there are no lectures yet!"});
     else res.json(response);
   });
+});
+
+router.get('/getToday/:course', async (req, res) => {
+  var response = [];
+  var men = [];
+  var lec = [];
+  var fee = [];
+  var eve = [];
+  //Todays meals
+  plan.find((err, data) => {
+    if (err) res.json(err);
+    data.forEach(e => {
+      if ((new Date()).getMonth() + 1 >= e.validUntil.substring(3, 5) && (new Date()).toJSON().substring(8,10) <= e.validUntil.substring(0, 2)) men.push({validUntil: e.validUntil, montag: e.Montag, dienstag: e.Dienstag, mittwoch: e.Mittwoch, donnerstag: e.Donnerstag, freitag: e.Freitag});
+    });
+    //Todays lectures
+    lecture.find({course: req.params.course.toUpperCase()}, (err, data) => {
+      if (err) res.json(err);
+      data.forEach(e => {
+        if((new Date(e.dtstart)) == (new Date())) lec.push({start: e.dtstart, end: e.dtend, lastModified: e['last-modified'], title: e.summary, description: e.description, location: e.location, course: e.course});
+      });
+      //New news
+      feed.find((err, data) => {
+        if (err) res.json(err);
+        data.forEach(e => {
+          if((new Date(e.isoDate)) == (new Date())) fee.push({title: e.title, description: e['content:encoded'], url: e.link, created: new Date(e.isoDate)})
+        });
+        //Todays events
+        events.find((err, data) => {
+          if (err) res.json(err);
+          data.forEach(e => {
+            if ((new Date(e.dtstart)) == (new Date())) eve.push({start: e.dtstart, end: e.dtend, lastModified: e['last-modified'],title: e.summary, description: e.description,  location: e.location});
+          });
+          response.push(men);
+          response.push(lec);
+          response.push(fee);
+          response.push(eve);
+          res.json(response);
+        });
+      });
+    });
+  });  
 });
 
 router.get('/events', (req, res) => {
@@ -81,7 +122,9 @@ router.get('/mensaplan', (req, res) => {
   plan.find((err, data) => {
     if (err) res.json(err);
     var response = [];
-    data.forEach(e => response.push({validUntil: e.validUntil, montag: e.Montag, dienstag: e.Dienstag, mittwoch: e.Mittwoch, donnerstag: e.Donnerstag, freitag: e.Freitag}));
+    data.forEach(e => {
+      if ((new Date()).getMonth() + 1 >= e.validUntil.substring(3, 5) && (new Date()).toJSON().substring(8,10) <= e.validUntil.substring(0, 2)) response.push({validUntil: e.validUntil, montag: e.Montag, dienstag: e.Dienstag, mittwoch: e.Mittwoch, donnerstag: e.Donnerstag, freitag: e.Freitag});
+    });
     res.json(response);
   });
 });
