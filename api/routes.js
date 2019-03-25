@@ -84,19 +84,19 @@ router.get('/getToday/:course', async (req, res) => {
     lecture.find({course: req.params.course.toUpperCase()}, (err, data) => {
       if (err) res.json(err);
       data.forEach(e => {
-        if((new Date(e.dtstart)) == (new Date())) lec.push({start: e.dtstart, end: e.dtend, lastModified: e['last-modified'], title: e.summary, description: e.description, location: e.location, course: e.course});
+        if((new Date(e.dtstart)).setHours(0, 0, 0, 0) == (new Date()).setHours(0, 0, 0, 0)) lec.push({start: e.dtstart, end: e.dtend, lastModified: e['last-modified'], title: e.summary, description: e.description, location: e.location, course: e.course});
       });
       //New news
       feed.find((err, data) => {
         if (err) res.json(err);
         data.forEach(e => {
-          if((new Date(e.isoDate)) == (new Date())) fee.push({title: e.title, description: e['content:encoded'], url: e.link, created: new Date(e.isoDate)})
+          if((new Date(e.isoDate)).setHours(0, 0, 0, 0) == (new Date()).setHours(0, 0, 0, 0)) fee.push({title: e.title, description: e['content:encoded'], url: e.link, created: new Date(e.isoDate)})
         });
         //Todays events
         events.find((err, data) => {
           if (err) res.json(err);
           data.forEach(e => {
-            if ((new Date(e.dtstart)) == (new Date())) eve.push({start: e.dtstart, end: e.dtend, lastModified: e['last-modified'],title: e.summary, description: e.description,  location: e.location});
+            if ((new Date(e.dtstart)).setHours(0, 0, 0, 0) == (new Date()).setHours(0, 0, 0, 0)) eve.push({start: e.dtstart, end: e.dtend, lastModified: e['last-modified'],title: e.summary, description: e.description,  location: e.location});
           });
           response.push(men);
           response.push(lec);
@@ -106,7 +106,7 @@ router.get('/getToday/:course', async (req, res) => {
         });
       });
     });
-  });  
+  });
 });
 
 router.get('/events', (req, res) => {
