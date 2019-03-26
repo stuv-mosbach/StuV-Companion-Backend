@@ -5,6 +5,11 @@ var lectures = require('../datacollectors/lectures/lectures');
 var feed = require('../datacollectors/newsfeed/feed');
 var course = require('../datacollectors/courses/courses');
 var dbProvider = require('../utils/db');
+var eventsCleanUp = require('../cleanUp/eventsCleanUp');
+var lecturesCleanUp = require('../cleanUp/lecturesCleanUp');
+var coursesCleanUp = require('../cleanUp/courseCleanUp');
+var newsCleanUp = require('../cleanUp/newsCleanUp');
+var planCleanUp = require('../cleanUp/planCleanUp');
 
 var url_DB = dbProvider.getUrl() + "agenda";
 
@@ -36,6 +41,36 @@ agent.define('Update Kurse', async (job, done) => {
 
 agent.define('Update Feed', async (job, done) => {
   feed.run()
+  .then(() => {done();})
+  .catch(err => {done(err);});
+});
+
+agent.define('Clean Events', async (job, done) => {
+  eventsCleanUp.run()
+  .then(() => {done();})
+  .catch(err => {done(err);});
+});
+
+agent.define('Clean Lectures', async (job, done) => {
+  lecturesCleanUp.run()
+  .then(() => {done();})
+  .catch(err => {done(err);});
+});
+
+agent.define('Clean Courses', async (job, done) => {
+  coursesCleanUp.run()
+  .then(() => {done();})
+  .catch(err => {done(err);});
+});
+
+agent.define('Clean News', async (job, done) => {
+  newsCleanUp.run()
+  .then(() => {done();})
+  .catch(err => {done(err);});
+});
+
+agent.define('Clean Plan', async (job, done) => {
+  planCleanUp.run()
   .then(() => {done();})
   .catch(err => {done(err);});
 });
