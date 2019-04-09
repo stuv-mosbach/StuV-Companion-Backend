@@ -8,35 +8,6 @@ var events = mongoose.model('event', provider.getES());
 var plan = mongoose.model('plan', provider.getPS());
 var feed = mongoose.model('feed', provider.getFS());
 
-router.get('/', (req, res) => {
-  res.json({
-    status: 'API online!',
-    message: 'Overview of functions:',
-    functions: [
-      {
-        url: "/courses",
-        description: "get all courses"
-      },
-      {
-        url: "/lectures/[COURSE]",
-        description: "get all lectures for a course given via parameter"
-      },
-      {
-        url: "/events",
-        description: "get all events happening in the future"
-      },
-      {
-        url: "/mensaplan",
-        description: "get the mensaplan for this week"
-      },
-      {
-        url: "/news",
-        description: "get the newsfeed from our website"
-      }
-    ]
-  });
-});
-
 router.get('/courses', (req, res) => {
   course.find((err, data) => {
     if (err) res.json(err);
@@ -90,7 +61,7 @@ router.get('/getToday/:course', async (req, res) => {
       feed.find((err, data) => {
         if (err) res.json(err);
         data.forEach(e => {
-          if((new Date(e.isoDate)).setHours(0, 0, 0, 0) == (new Date()).setHours(0, 0, 0, 0)) fee.push({title: e.title, description: e['content:encoded'], url: e.link, created: new Date(e.isoDate)})
+          if((new Date(e.isoDate)).setHours(0, 0, 0, 0) == (new Date()).setHours(0, 0, 0, 0)) fee.push({title: e.title, description: e['content:encoded'], url: e.link, created: new Date(e.isoDate)});
         });
         //Todays events
         events.find((err, data) => {
@@ -113,7 +84,9 @@ router.get('/events', (req, res) => {
   events.find((err, data) => {
     if (err) res.json(err);
     var response = [];
-    data.forEach(e => response.push({start: e.dtstart, end: e.dtend, lastModified: e['last-modified'],title: e.summary, description: e.description,  location: e.location}));
+    data.forEach(e => {
+      if((new Date(e.dtstart).setHours(0,0,0,0)) >= (new Date().setHours(0,0,0,0))) response.push({start: e.dtstart, end: e.dtend, lastModified: e['last-modified'],title: e.summary, description: e.description,  location: e.location});
+    });
     res.json(response);
   });
 });
