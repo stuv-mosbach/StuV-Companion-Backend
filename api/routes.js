@@ -49,7 +49,7 @@ router.get('/getToday/:course', async (req, res) => {
   plan.find((err, data) => {
     if (err) res.json(err);
     data.forEach(e => {
-      if ((new Date()).getMonth() + 1 >= e.validUntil.substring(3, 5) && (new Date()).toJSON().substring(8,10) <= e.validUntil.substring(0, 2)) men.push({validUntil: e.validUntil, montag: e.Montag, dienstag: e.Dienstag, mittwoch: e.Mittwoch, donnerstag: e.Donnerstag, freitag: e.Freitag});
+      if ((new Date()).getMonth() + 1 == e.validUntil.substring(3, 5) && (new Date()).toJSON().substring(8,10) <= e.validUntil.substring(0, 2)) men.push({validUntil: e.validUntil, montag: e.Montag, dienstag: e.Dienstag, mittwoch: e.Mittwoch, donnerstag: e.Donnerstag, freitag: e.Freitag});
     });
     //Todays lectures
     lecture.find({course: req.params.course.toUpperCase()}, (err, data) => {
@@ -96,7 +96,7 @@ router.get('/mensaplan', (req, res) => {
     if (err) res.json(err);
     var response = [];
     data.forEach(e => {
-      if ((new Date()).getMonth() + 1 >= e.validUntil.substring(3, 5) && (new Date()).toJSON().substring(8,10) <= e.validUntil.substring(0, 2)) response.push({validUntil: e.validUntil, montag: e.Montag, dienstag: e.Dienstag, mittwoch: e.Mittwoch, donnerstag: e.Donnerstag, freitag: e.Freitag});
+      if ((new Date()).getMonth() + 1 == e.validUntil.substring(3, 5) && (new Date()).toJSON().substring(8,10) <= e.validUntil.substring(0, 2)) response.push({validUntil: e.validUntil, montag: e.Montag, dienstag: e.Dienstag, mittwoch: e.Mittwoch, donnerstag: e.Donnerstag, freitag: e.Freitag});
     });
     res.json(response);
   });
