@@ -19,7 +19,7 @@ var db = mongoose.connection;
 
 app.use(cors());
 
-app.use('/api/docs', swaggerUI.serve(), swaggerUI.setup(swaggerDocument));
+app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use('/dash', agendash(scheduler.get()));
 
