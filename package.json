@@ -1,6 +1,6 @@
 {
   "name": "backend",
-  "version": "0.2.3",
+  "version": "2.2",
   "description": "The backend with datacollectors and scheduler",
   "main": "backend.js",
   "scripts": {
