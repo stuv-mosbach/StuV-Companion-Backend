@@ -5,6 +5,8 @@ var routes = require('./api/routes');
 var mongoose = require('mongoose');
 var dbProvider = require('./utils/db');
 var cors = require('cors');
+var swaggerUI = require('swagger-ui-express'),
+swaggerDocument = require('./swagger.json');
 
 var dbUrl = dbProvider.getUrl() + dbProvider.getEnv();
 var app = express();
@@ -16,6 +18,8 @@ mongoose.connect(dbUrl, { useNewUrlParser: true });
 var db = mongoose.connection;
 
 app.use(cors());
+
+app.use('/api/docs', swaggerUI.serve(), swaggerUI.setup(swaggerDocument));
 
 app.use('/dash', agendash(scheduler.get()));
 

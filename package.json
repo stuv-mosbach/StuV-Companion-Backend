@@ -1,6 +1,6 @@
 {
   "name": "backend",
-  "version": "2.2",
+  "version": "2.2.0",
   "description": "The backend with datacollectors and scheduler",
   "main": "backend.js",
   "scripts": {
@@ -21,6 +21,7 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "rss-parser": "^3.7.0",
-    "split-lines": "^2.0.0"
+    "split-lines": "^2.0.0",
+    "swagger-ui-express": "^4.0.2"
   }
 }

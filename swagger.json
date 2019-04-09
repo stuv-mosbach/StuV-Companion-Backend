@@ -1,0 +1,341 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "description": "This is the backend API documentation for the web application http://dev.stuv-mosbach.de",
+      "version": "2.3.0",
+      "title": "StuV Companion - Backend",
+      "termsOfService": "https://stuv-mosbach.de/impressum/",
+      "contact": {
+        "email": "it@stuv-mosbach.de"
+      },
+      "license": {
+        "name": "GPL-3.0",
+        "url": "https://www.gnu.org/licenses/gpl-3.0.en.html"
+      }
+    },
+    "host": "dev.stuv-mosbach.de:8080",
+    "basePath": "/api",
+    "tags": [
+      {
+        "name": "API",
+        "description": "Everything about the API"
+      }
+    ],
+    "schemes": [
+      "http"
+    ],
+    "paths": {
+      "/courses": {
+        "get": {
+          "tags": [
+            "API"
+          ],
+          "summary": "Get all availible courses",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "304": {
+              "description": "successful operation",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/course"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/lectures/{course}": {
+        "get": {
+          "tags": [
+            "API"
+          ],
+          "summary": "Load all lectures of a course",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "course",
+              "in": "path",
+              "description": "course name",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "304": {
+              "description": "successful operation",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/lecture"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/futureLectures/{course}": {
+        "get": {
+          "tags": [
+            "API"
+          ],
+          "summary": "Load future lectures of a course",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "course",
+              "in": "path",
+              "description": "course name",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "304": {
+              "description": "successful operation",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/lecture"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/events": {
+        "get": {
+          "tags": [
+            "API"
+          ],
+          "summary": "Get all events in the future",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "304": {
+              "description": "successful operation",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/event"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/mensaplan": {
+        "get": {
+          "tags": [
+            "API"
+          ],
+          "summary": "Get meals for week",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "304": {
+              "description": "successful operation",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/mensaplan"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/news": {
+        "get": {
+          "tags": [
+            "API"
+          ],
+          "summary": "Get all news from the website feed",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "304": {
+              "description": "successful operation",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/news"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/getToday/{course}": {
+        "get": {
+          "tags": [
+            "API"
+          ],
+          "summary": "Spezial funtion to displays todays information for the frontend",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "course",
+              "in": "path",
+              "description": "course name",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "304": {
+              "description": "successful operation",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/definitions/mensaplan"
+                    },
+                    {
+                      "$ref": "#/definitions/lecture"
+                    },
+                    {
+                      "$ref": "#/definitions/event"
+                    },
+                    {
+                      "$ref": "#/definitions/news"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "course": {
+        "type": "string"
+      },
+      "mensaplan": {
+        "type": "object",
+        "properties": {
+          "validUntil": {
+            "type": "string",
+            "format": "date"
+          },
+          "montag": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "dienstag": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mittwoch": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "donnerstag": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "freitag": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "news": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "format": "html"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      },
+      "event": {
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          }
+        }
+      },
+      "lecture": {
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "course": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
