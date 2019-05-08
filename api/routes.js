@@ -69,6 +69,7 @@ router.get('/getToday/:course', async (req, res) => {
           data.forEach(e => {
             if ((new Date(e.dtstart)).setHours(0, 0, 0, 0) == (new Date()).setHours(0, 0, 0, 0)) eve.push({start: e.dtstart, end: e.dtend, lastModified: e['last-modified'],title: e.summary, description: e.description,  location: e.location});
           });
+          eve.reverse();
           response.push(men);
           response.push(lec);
           response.push(fee);
@@ -87,6 +88,7 @@ router.get('/events', (req, res) => {
     data.forEach(e => {
       if((new Date(e.dtstart).setHours(0,0,0,0)) >= (new Date().setHours(0,0,0,0))) response.push({start: e.dtstart, end: e.dtend, lastModified: e['last-modified'],title: e.summary, description: e.description,  location: e.location});
     });
+    response.reverse();
     res.json(response);
   });
 });
