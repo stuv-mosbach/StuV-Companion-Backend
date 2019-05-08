@@ -20,14 +20,51 @@ const readPDF = (resolve, reject) => {
 };
 
 const createJSON = (resolve, reject) => {
+  var monday = [];
+  var tuesday = [];
+  var wednesday = [];
+  var thursday = [];
+  var friday = [];
+  for(let i = 0; i < data.length; i++) {
+      if(data[i] == "Montag: ") {
+          for(let j = i + 1; j < data.length; j++) {
+              if(data[j] == " ") break;
+              monday.push(data[j])
+          }
+      }
+      if(data[i] == "Dienstag: ") {
+          for(let k = i + 1; k < data.length; k++) {
+              if(data[k] == " ") break;
+              tuesday.push(data[k])
+          }
+      }
+      if(data[i] == "Mittwoch: ") {
+          for(let l = i + 1; l < data.length; l++) {
+              if(data[l] == " ") break;
+              wednesday.push(data[l])
+          }
+      }
+      if(data[i] == "Donnerstag: ") {
+          for(let m = i + 1; m < data.length; m++) {
+              if(data[m] == " ") break;
+              thursday.push(data[m])
+          }
+      }
+      if(data[i] == "Freitag: ") {
+          for(let n = i + 1; n < data.length; n++) {
+              if(data[n] == " ") break;
+              friday.push(data[n])
+          }
+      }
+  }
   var valid = data[5].substr((data[5].length - 11), data[5].length);
   var object = {
     validUntil: valid,
-    Montag: [data[12], data[13], data[14], data[15]],
-    Dienstag: [data[18], data[19], data[20], data[21]],
-    Mittwoch: [data[24], data[25], data[26], data[27]],
-    Donnerstag: [data[30], data[31], data[32], data[33]],
-    Freitag: [data[36], data[37], data[38], data[39]]
+    Montag: monday,
+    Dienstag: tuesday,
+    Mittwoch: wednesday,
+    Donnerstag: thursday,
+    Freitag: friday
   };
   updatePlan(object, resolve, reject);
 };
