@@ -109,6 +109,7 @@ router.get('/news', (req, res) => {
     if (err) res.json(err);
     var response = [];
     data.forEach(e => response.push({title: e.title, description: e['content:encoded'], url: e.link, created: new Date(e.isoDate)}));
+    response.reverse();
     res.json(response);
   });
 });
