@@ -26,31 +26,31 @@ const createJSON = (resolve, reject) => {
   var thursday = [];
   var friday = [];
   for(let i = 0; i < data.length; i++) {
-      if(data[i] == "Montag: ") {
+      if(data[i] == "Montag: " || data[i] == "Montag ") {
           for(let j = i + 1; j < data.length; j++) {
               if(data[j] == " ") break;
               monday.push(data[j])
           }
       }
-      if(data[i] == "Dienstag: ") {
+      if(data[i] == "Dienstag: " || data[i] == "Dienstag ") {
           for(let k = i + 1; k < data.length; k++) {
               if(data[k] == " ") break;
               tuesday.push(data[k])
           }
       }
-      if(data[i] == "Mittwoch: ") {
+      if(data[i] == "Mittwoch: " || data[i] == "Mittwoch ") {
           for(let l = i + 1; l < data.length; l++) {
               if(data[l] == " ") break;
               wednesday.push(data[l])
           }
       }
-      if(data[i] == "Donnerstag: ") {
+      if(data[i] == "Donnerstag: " || data[i] == "Donnerstag ") {
           for(let m = i + 1; m < data.length; m++) {
               if(data[m] == " ") break;
               thursday.push(data[m])
           }
       }
-      if(data[i] == "Freitag: ") {
+      if(data[i] == "Freitag: " || data[i] == "Freitag ") {
           for(let n = i + 1; n < data.length; n++) {
               if(data[n] == " ") break;
               friday.push(data[n])
