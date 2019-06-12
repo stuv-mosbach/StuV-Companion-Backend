@@ -6,11 +6,11 @@ var mongoose = require('mongoose');
 var dbProvider = require('./utils/db');
 var cors = require('cors');
 var swaggerUI = require('swagger-ui-express'),
-swaggerDocument = require('./swagger.json');
+    swaggerDocument = require('./swagger.json');
 
 var dbUrl = dbProvider.getUrl() + dbProvider.getEnv();
 var app = express();
-var port = 8080;
+var port = 8090;
 
 scheduler.run();
 
@@ -26,5 +26,5 @@ app.use('/dash', agendash(scheduler.get()));
 app.use('/api', routes);
 
 app.listen(port, () => {
-  console.log("Backend running on port: " + port);
+    console.log("Backend running on port: " + port);
 });
