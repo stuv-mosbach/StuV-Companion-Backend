@@ -1,4 +1,4 @@
-var url = "mongodb://172.19.0.5:27017/";
+var url = process.env.DB_HOST;
 var env = "Prod";
 
 exports.getUrl = () => {
