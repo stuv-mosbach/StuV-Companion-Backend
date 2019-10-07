@@ -88,7 +88,7 @@ router.get('/events', (req, res) => {
     data.forEach(e => {
       if((new Date(e.dtstart).setHours(0,0,0,0)) >= (new Date().setHours(0,0,0,0))) response.push({start: e.dtstart, end: e.dtend, lastModified: e['last-modified'],title: e.summary, description: e.description,  location: e.location});
     });
-    response.reverse();
+    response.sort((a, b) => {return new Date(a.start) - new Date(b.start)});
     res.json(response);
   });
 });
