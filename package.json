@@ -11,7 +11,7 @@
   "dependencies": {
     "agenda": "^2.0.2",
     "agendash": "^1.0.0",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "cors": "^2.8.5",
     "crawler-request": "^1.2.2",
     "dotenv": "^8.0.0",
